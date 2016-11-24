@@ -21,6 +21,10 @@ Prerequisites
 --------------
 * Docker 1.6+
 
+Manuscript:
+------------
+[socker manuscript](https://github.com/unioslo/socker/blob/master/socker.pdf)
+
 Support and Bug Reports
 -------------------------------
 Report an issue on the [issues](https://github.com/unioslo/socker/issues) section or send an email to azab@usit.uio.no

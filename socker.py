@@ -42,6 +42,7 @@ def main(argv):
             raise Exception()
     except:
         print 'No authorized images to run. Socker cannot be used at the moment.\nContact hpc-drift@usit.uio.no\n'
+        sys.exit(2)
         
     if argv[0] in ['-v','--verbose']:
         del argv[0]

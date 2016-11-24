@@ -95,7 +95,7 @@ def main(argv):
             if len(argv) >2:
                 cmd = ''
                 for a in argv[2:]:
-                    if ' ' in a:
+                    if ' ' in a or ';' in a or '&' in a:
                         '''composite argument'''
                         a = '"'+a+'"'
                     cmd += a + ' '

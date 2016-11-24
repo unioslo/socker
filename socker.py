@@ -56,6 +56,7 @@ def main(argv):
     elif argv[0] == 'images':
         print '\n'.join(images)
         sys.exit()
+        ## This part should be used if you have a secure local registry installed 
         # p = subprocess.Popen('docker images', shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         # out,err = p.communicate()
         # if p.returncode == 0:
@@ -187,37 +188,3 @@ def setSlurmCgroups(userID,jobID,containerPID):
 if __name__ == "__main__":
    main(sys.argv[1:])
    
-    ###Depricated##
-    # try:
-    #   opts, args = getopt.getopt(argv[1:],"hli:c:",["images","image=","command="])
-    # except getopt.GetoptError:
-    #   print 'The run command should be: socker run -i <image> -c <command>'
-    #   sys.exit(2)
-        
-    # import argparse
-    # parser = argparse.ArgumentParser(description="Socker, a wrapper for secure running of Docker containers")
-    # parser.add_argument("images", help="List Docker image")
-    # parser.add_argument("-c", "--command", dest="command", metavar='N', type=str, help="Command for the image")
-    # parser.add_argument("-i", "--image", dest="img", help="The Docker image to run")
-    # args = parser.parse_args()
-    
-    # if args.images:
-    #     print subprocess.Popen('docker images', shell=True, stdout=subprocess.PIPE).stdout.read()
-    #     sys.exit()
-    # else:
-    #     cmd = ' '.join(args.command)
-    #     img = args.img
-    
-    # for opt, arg in opts:
-    #    if opt == '-h':
-    #      print ' -i <image> -c <command>'
-    #      sys.exit()
-    #    elif opt in ('-l','--images'):
-    #      print subprocess.Popen('docker images', shell=True, stdout=subprocess.PIPE).stdout.read()
-    #      sys.exit()    
-    #    elif opt in ("-i", "--image"):
-    #      img = arg
-    #    elif opt in ("-c", "--command"):
-    #      cmd = arg
-    #    elif cmd and img:
-    #      cmd += ' '+opt+' '+arg

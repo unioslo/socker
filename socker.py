@@ -1,4 +1,4 @@
-import os,sys,subprocess,getopt,uuid
+import os,sys,subprocess,uuid
 
 def main(argv):
     '''Intitialization:'''
@@ -7,7 +7,22 @@ def main(argv):
     slurm_job_id = None
     verbose = False
     dockerv = None
+    dockeruid = None
+    dockergid = None
     
+    '''Get the UID and GID of the docker user and group'''
+    import pwd,grp
+    try:
+        dockeruid = pwd.getpwnam('dockeruser').pw_uid
+        dockergid = grp.getgrnam('docker').gr_gid
+    except KeyError:
+        print 'There must exist a user "dockeruser" and a group "docker"'
+        sys.exit(2)
+    if not [g.gr_name for g in grp.getgrall() if 'dockeruser' in g.gr_mem] == ['docker']:
+        print 'The user "dockeruser" must be a member of ONLY the "docker" group'
+        sys.exit(2)
+    
+    '''Get the current user information'''
     user = os.getuid()
     group = os.getgid()
     pwd = os.getcwd()
@@ -21,9 +36,11 @@ def main(argv):
     except KeyError as e:
         #print e,slurm_job_id
         pass
+    
+    '''Set the user to root'''
     os.setuid(0)
-    os.setgid(0)
-    #print 'setuid and gid done to root...'
+    os.setuid(0)
+    #print 'current UID: ',os.getuid(),'\t Current GID: ',os.getgid()
     
     '''Checking for docker on the system'''
     p = subprocess.Popen('docker --version',shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -57,7 +74,7 @@ def main(argv):
     elif argv[0] == 'images':
         print '\n'.join(images)
         sys.exit()
-        ## This part should be used if you have a secure local registry installed 
+        ##This part should be used when you have a secure local docker registry
         # p = subprocess.Popen('docker images', shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         # out,err = p.communicate()
         # if p.returncode == 0:
@@ -98,7 +115,7 @@ def main(argv):
     '''Compose the docker command'''
     dockercmd = 'docker run --name='+cid+' -d -u '+str(user)+':'+str(group)
     if slurm_job_id:
-        dockercmd += ' -v $SCRATCH:$SCRATCH -v -e SCRATCH=$SCRATCH'    
+        dockercmd += ' -v $SCRATCH:$SCRATCH -e SCRATCH=$SCRATCH'    
     dockercmd += ' -v /work/:/work/ -v '+pwd+':'+pwd+' -v '+home+':'+home+' -w '+pwd+' -e HOME='+home+' '+img
     if cmd:
         dockercmd += ' '+cmd
@@ -108,16 +125,18 @@ def main(argv):
         print 'docker command:\n'+dockercmd+'\n'
         print 'executing.....\n'
     
-    '''Start the container'''
-    p = subprocess.Popen(dockercmd, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    '''Start the container (run this command as "dockeruser" not as root)'''
+    p = subprocess.Popen(dockercmd, preexec_fn=reincarnate(dockeruid,dockergid), shell=True, \
+                         stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    
     out,err = p.communicate()
     if p.returncode != 0:
-        print err
+        print '#Error: '+err
         sys.exit(2)
     elif verbose:
         print err
         print 'container ID:\n',out
-    
+    #print 'current UID: ',os.getuid(),'\t Current GID: ',os.getgid()
     '''Get the container's PID'''    
     cpid = subprocess.Popen("docker inspect -f '{{ .State.Pid }}' "+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
     #print 'container PID: ', cpid
@@ -142,8 +161,16 @@ def main(argv):
             else:
                 sys.stdout.write(d['log'])
     if verbose:        
-        print '\nremoving the container...'
+        print '\nremoving the container...\n'
     subprocess.Popen('docker rm '+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
+
+def reincarnate(user_uid, user_gid):
+    def result():
+        #print 'uid, gid = %d, %d; %s' % (os.getuid(), os.getgid(), 'starting reincarnation')
+        os.setgid(user_gid)
+        os.setuid(user_uid)
+        #print 'uid, gid = %d, %d; %s' % (os.getuid(), os.getgid(), 'ending reincarnation')
+    return result
 
 def printHelp():
     print 'NAME'
@@ -185,7 +212,6 @@ def setSlurmCgroups(userID,jobID,containerPID):
     subprocess.Popen('cgclassify -g memory:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
     subprocess.Popen('cgclassify -g cpuset:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
     subprocess.Popen('cgclassify -g freezer:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
-
+    
 if __name__ == "__main__":
    main(sys.argv[1:])
-   

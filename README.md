@@ -5,7 +5,7 @@ Usage:
 * Install [Nuitka](http://nuitka.net/) with it's prerequisites (python and gcc)
 * Compile socker: 
 ```
-nuitka socker.py
+nuitka --recurse-on socker.py
 ```
 * Change the owner of the binary to root and enable SUID: 
 ````
@@ -53,6 +53,7 @@ SUPPORT
 Prerequisites
 --------------
 * Docker 1.6+
+* You MUST have a group ``docker`` and a user ``dockeruser`` who is member of ONLY the ``docker`` group
 * Slurm is not a prerequisite, but if you run socker inside a Slurm job, it will put the container under Slurm's control
 
 Manuscript:

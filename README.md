@@ -20,6 +20,7 @@ sudo vim socker-images
 Prerequisites
 --------------
 * Docker 1.6+
+* Slurm is not a prerequisite, but if you run socker inside a Slurm job, it will put the container under Slurm's control
 
 Manuscript:
 ------------

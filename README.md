@@ -17,6 +17,39 @@ sudo chmod +s socker
 ```
 sudo vim socker-images
 ```
+* Options:
+```
+socker --help 
+
+NAME
+	socker - Secure runner for Docker containers
+
+SYNOPSIS
+	socker run <docker-image> <command>
+
+OPTIONS
+	--version
+		show the version number and exit
+	-h, --help
+		show this help message and exit
+	-v, --verbose
+		run in verbose mode
+	images
+		List the authorized Docker images (found in socker-images)
+	run IMAGE COMMAND
+		start a container from IMAGE executing COMMAND as the user
+
+EXAMPLES
+	List available images
+		$ socker images
+	Run a CentOS container and print the system release
+		$ socker run centos cat /etc/system-release
+	Run the previous command in verbose mode
+		$ socker -v run centos cat /etc/system-release
+
+SUPPORT
+	Contact hpc-drift@usit.uio.no
+```
 Prerequisites
 --------------
 * Docker 1.6+

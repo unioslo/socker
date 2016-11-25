@@ -13,13 +13,13 @@ def main(argv):
     '''Get the UID and GID of the docker user and group'''
     import pwd,grp
     try:
-        dockeruid = pwd.getpwnam('dockeruser').pw_uid
+        dockeruid = pwd.getpwnam('dockerroot').pw_uid
         dockergid = grp.getgrnam('docker').gr_gid
     except KeyError:
-        print 'There must exist a user "dockeruser" and a group "docker"'
+        print 'There must exist a user "dockerroot" and a group "docker"'
         sys.exit(2)
-    if not [g.gr_name for g in grp.getgrall() if 'dockeruser' in g.gr_mem] == ['docker']:
-        print 'The user "dockeruser" must be a member of ONLY the "docker" group'
+    if not [g.gr_name for g in grp.getgrall() if 'dockerroot' in g.gr_mem] == ['docker']:
+        print 'The user "dockerroot" must be a member of ONLY the "docker" group'
         sys.exit(2)
     
     '''Get the current user information'''
@@ -99,6 +99,7 @@ def main(argv):
                         '''composite argument'''
                         a = '"'+a+'"'
                     cmd += a + ' '
+                    sys.stderr.write('WARNING: you have a composite argument '+a+' which you''d probably need to run via sh -c')
                 cmd = cmd.rstrip()
         except:
             print 'The run command should be: socker run <image> <command>'
@@ -125,7 +126,7 @@ def main(argv):
         print 'docker command:\n'+dockercmd+'\n'
         print 'executing.....\n'
     
-    '''Start the container (run this command as "dockeruser" not as root)'''
+    '''Start the container (run this command as "dockerroot" not as root)'''
     p = subprocess.Popen(dockercmd, preexec_fn=reincarnate(dockeruid,dockergid), shell=True, \
                          stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     
@@ -141,9 +142,13 @@ def main(argv):
     cpid = subprocess.Popen("docker inspect -f '{{ .State.Pid }}' "+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
     #print 'container PID: ', cpid
     
-    '''Classify the container process to the Slurm's cgroups'''
     if slurm_job_id:
-        setSlurmCgroups(user,slurm_job_id,cpid)
+        '''Classify the container process (and all of it's children) to the Slurm's cgroups assigned to the job'''
+        cchildren = subprocess.Popen('pgrep -P'+str(cpid), shell=True, stdout=subprocess.PIPE).stdout.read().split('\n')
+        cpids = [cpid] + [int(pid) for pid in cchildren if pid.strip() != '']
+        print cpids
+        for pid in cpids:
+            setSlurmCgroups(user,slurm_job_id,pid)
     
     if verbose:
         print 'waiting for the container to exit...\n'

@@ -1,10 +1,12 @@
 # socker: A wrapper for secure running of Docker containers on [Slurm](https://slurm.schedmd.com/)
 
-What it does
+Introduction
 -------------
 Socker is secure for enabling unprivileged users to run Docker containers, because it does two things: 
 * It enforces running containers within as the user not as root 
 * When it is called inside a Slurm job, it enforces the inclusion of containers in the [cgroups assigned by Slurm to the parent jobs](https://slurm.schedmd.com/cgroups.html)
+
+More details are in the [socker manuscript](https://github.com/unioslo/socker/blob/master/socker.pdf)
 
 Usage
 -------
@@ -61,10 +63,6 @@ Prerequisites
 * Docker 1.6+
 * You MUST have a group ``docker`` and a user ``dockerroot`` who is member of ONLY the ``docker`` group. The ``docker run`` command will be executed as ``dockerroot``
 * Slurm is not a prerequisite, but if you run socker inside a Slurm job, it will put the container under Slurm's control
-
-Manuscript
-------------
-[socker manuscript](https://github.com/unioslo/socker/blob/master/socker.pdf)
 
 Support and Bug Reports
 -------------------------------

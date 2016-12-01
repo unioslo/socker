@@ -85,7 +85,7 @@ def main(argv):
         #     sys.exit(2)
     elif argv[0] == 'run':
         if len(argv) < 2:
-            print 'You have to specify an image to run'
+            print 'You need to specify an image to run'
             sys.exit(2)
         try:
             img = argv[1]
@@ -98,12 +98,16 @@ def main(argv):
                     if ' ' in a or ';' in a or '&' in a:
                         '''composite argument'''
                         a = '"'+a+'"'
-                        sys.stderr.write('WARNING: you have a composite argument '+a+' which you''d probably need to run via sh -c\n')
+                        sys.stderr.write('WARNING: you have a composite argument '+a+' which you\'d probably need to run via sh -c\n')
                     if 'docker' in a:
                         print('For security reasons, you cannot include "docker" in your command')
                         sys.exit()
                     cmd += a + ' '
                 cmd = cmd.rstrip()
+            else:
+                print 'You need to specify a command to run'
+                sys.exit(2)
+                
         except:
             print 'The run command should be: socker run <image> <command>'
             sys.exit(2)
@@ -150,7 +154,7 @@ def main(argv):
         '''Classify the container process (and all of it's children) to the Slurm's cgroups assigned to the job'''
         cchildren = subprocess.Popen('pgrep -P'+str(cpid), shell=True, stdout=subprocess.PIPE).stdout.read().split('\n')
         cpids = [cpid] + [int(pid) for pid in cchildren if pid.strip() != '']
-        print cpids
+        #print cpids
         for pid in cpids:
             setSlurmCgroups(user,slurm_job_id,pid,verbose)
     
@@ -219,9 +223,12 @@ def setSlurmCgroups(userID,jobID,containerPID,verbose=False):
     subprocess.Popen('cgclassify -g cpu:/ '+str(cpid), shell=True, stdout=subprocess.PIPE)
     '''Include the container process in the Slurm cgroups'''
     out = ''
-    out += 'adding '+str(cpid)+' to memory:/: '+subprocess.Popen('cgclassify -g memory:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
-    out += 'adding '+str(cpid)+' to cpuset:/: '+subprocess.Popen('cgclassify -g cpuset:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
-    out += 'adding '+str(cpid)+' to freezer:/: '+subprocess.Popen('cgclassify -g freezer:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
+    out += 'adding '+str(cpid)+' to Slurm\'s memory cgroup: '+\
+    subprocess.Popen('cgclassify -g memory:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
+    out += '\nadding '+str(cpid)+' to Slurm''s cpuset cgroup: '+\
+    subprocess.Popen('cgclassify -g cpuset:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
+    out += '\nadding '+str(cpid)+' to Slurm''s freezer cgroup: '+\
+    subprocess.Popen('cgclassify -g freezer:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
     if verbose:
         print out
     

@@ -225,9 +225,9 @@ def setSlurmCgroups(userID,jobID,containerPID,verbose=False):
     out = ''
     out += 'adding '+str(cpid)+' to Slurm\'s memory cgroup: '+\
     subprocess.Popen('cgclassify -g memory:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
-    out += '\nadding '+str(cpid)+' to Slurm''s cpuset cgroup: '+\
+    out += '\nadding '+str(cpid)+' to Slurm\'s cpuset cgroup: '+\
     subprocess.Popen('cgclassify -g cpuset:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
-    out += '\nadding '+str(cpid)+' to Slurm''s freezer cgroup: '+\
+    out += '\nadding '+str(cpid)+' to Slurm\'s freezer cgroup: '+\
     subprocess.Popen('cgclassify -g freezer:/'+cgroupID, shell=True, stdout=subprocess.PIPE).stdout.read()
     if verbose:
         print out

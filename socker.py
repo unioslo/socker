@@ -25,9 +25,9 @@ def main(argv):
     '''Get the current user information'''
     user = os.getuid()
     group = os.getgid()
-    pwd = os.getcwd()
+    PWD = os.getcwd()
     cid = str(uuid.uuid4())
-    home = os.environ['HOME']
+    home = pwd.getpwuid(user).pw_dir
     #print 'current UID: ',os.getuid(),'\t Current GID: ',os.getgid()
     #print 'Home dir:',home
     try:
@@ -124,7 +124,7 @@ def main(argv):
     dockercmd = 'docker run --name='+cid+' -d -u '+str(user)+':'+str(group)
     if slurm_job_id:
         dockercmd += ' -v $SCRATCH:$SCRATCH -e SCRATCH=$SCRATCH'    
-    dockercmd += ' -v /work/:/work/ -v '+pwd+':'+pwd+' -v '+home+':'+home+' -w '+pwd+' -e HOME='+home+' '+img
+    dockercmd += ' -v /work/:/work/ -v '+PWD+':'+PWD+' -v '+home+':'+home+' -w '+PWD+' -e HOME='+home+' '+img
     if cmd:
         dockercmd += ' '+cmd
     

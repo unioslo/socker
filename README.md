@@ -11,7 +11,7 @@ More details are in the [socker manuscript](https://github.com/unioslo/socker/bl
 Design
 -------
 
-![Accessing Docker via Socker](https://github.com/unioslo/socker/blob/master/files/socker.png)
+<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="48">
 
 Usage
 -------

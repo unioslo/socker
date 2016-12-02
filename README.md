@@ -10,6 +10,7 @@ More details are in the [socker manuscript](https://github.com/unioslo/socker/bl
 
 Design
 -------
+Socker is composed of one binary that is a compiled python script. While system administrators can be members of the ``docker`` group, regular users can use Docker via Socker.
 
 <img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="400">
 

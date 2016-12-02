@@ -68,7 +68,7 @@ def main(argv):
             print 'You need to specify options to run in verbose mode'
             sys.exit(2)
     if argv[0] == '--version':
-        print 'Socker version: 0.0.1'
+        print 'Socker version: release 16.12'
         print 'Docker version: '+dockerv
         sys.exit()
     elif argv[0] == 'images':

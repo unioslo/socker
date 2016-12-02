@@ -8,6 +8,11 @@ Socker is secure for enabling unprivileged users to run Docker containers, becau
 
 More details are in the [socker manuscript](https://github.com/unioslo/socker/blob/master/socker.pdf)
 
+Design
+-------
+
+![Accessing Docker via Socker](socker/files/socker.png)
+
 Usage
 -------
 * Install [Nuitka](http://nuitka.net/) with it's prerequisites (python and gcc)

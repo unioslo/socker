@@ -11,7 +11,7 @@ More details are in the [socker manuscript](https://github.com/unioslo/socker/bl
 Design
 -------
 
-<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="48">
+<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="400">
 
 Usage
 -------

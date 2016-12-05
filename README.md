@@ -12,7 +12,11 @@ Design
 -------
 Socker is composed of one binary that is a compiled python script. While system administrators can be members of the ``docker`` group, regular users can use Docker via Socker.
 
-<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="400">
+<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="400"><br>
+
+Socker operation workflow is below
+
+<img src="https://github.com/unioslo/socker/blob/master/files/socker-workflow.png" width="400"><br>
 
 Usage
 -------

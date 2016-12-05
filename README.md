@@ -16,7 +16,7 @@ Socker is composed of one binary that is a compiled python script. While system 
 
 Socker operation workflow is below
 
-<img src="https://github.com/unioslo/socker/blob/master/files/socker-workflow.png" width="400"><br>
+<img src="https://github.com/unioslo/socker/blob/master/files/socker-workflow.png" width="600"><br>
 
 Usage
 -------

@@ -12,12 +12,13 @@ Design
 -------
 Socker is composed of one binary that is a compiled python script. While system administrators can be members of the ``docker`` group, regular users can use Docker via Socker.
 
-<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="400"><br>
-
-Socker operation workflow is below
-
-<img src="https://github.com/unioslo/socker/blob/master/files/socker-flowchart.png" width="600"><br>
-
+<p align="center">
+	<img src="https://github.com/unioslo/socker/blob/master/files/socker.png" width="400"><br>
+</p>
+Socker operation workflow is below:
+<p align="center">
+	<img src="https://github.com/unioslo/socker/blob/master/files/socker-flowchart.png" width="600"><br>
+</p>
 Usage
 -------
 * Install [Nuitka](http://nuitka.net/) with it's prerequisites (python and gcc)

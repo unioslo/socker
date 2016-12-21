@@ -6,7 +6,6 @@ Socker is secure for enabling unprivileged users to run Docker containers. It ma
 * It enforces running containers within as the user not as root 
 * When it is called inside a Slurm job, it enforces the inclusion of containers in the [cgroups assigned by Slurm to the parent jobs](https://slurm.schedmd.com/cgroups.html)
 
-More details are in the [socker manuscript](https://github.com/unioslo/socker/blob/master/socker.pdf)
 
 Design
 -------

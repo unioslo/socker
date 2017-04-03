@@ -15,8 +15,9 @@ Socker is composed of one binary that is a compiled python script. While system 
 </p>
 Socker operation workflow is below:
 <p align="center">
-	<img src="https://github.com/unioslo/socker/blob/master/files/socker-flowchart.png" width="600"><br>
+	<img src="https://github.com/unioslo/socker/blob/master/files/socker-flowchart.png" width="600">
 </p>
+
 Usage
 -------
 * Install [Nuitka](http://nuitka.net/) with it's prerequisites (python and gcc)
@@ -67,6 +68,7 @@ EXAMPLES
 SUPPORT
 	Contact hpc-drift@usit.uio.no
 ```
+
 Prerequisites
 --------------
 * Docker 1.6+

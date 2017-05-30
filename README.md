@@ -72,7 +72,7 @@ SUPPORT
 Prerequisites
 --------------
 * Docker 1.6+
-* You MUST have a group ``docker`` and a user ``dockerroot`` who is member of ONLY the ``docker`` group. The ``docker run`` command will be executed as ``dockerroot``
+* You MUST have a group ``docker`` and a user ``dockerroot`` who is member of ONLY the ``docker`` group. The ``docker run`` command will be executed as ``dockerroot``. [Here](https://github.com/unioslo/socker/blob/master/install-docker-centos6-beegfs.md) is an installation guide for CentOS 6 and BeeGFS
 * Slurm is not a prerequisite, but if you run socker inside a Slurm job, it will put the container under Slurm's control
 
 Support and Bug Reports

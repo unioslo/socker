@@ -26,17 +26,17 @@ Usage
 nuitka --recurse-on socker.py
 ```
 * Change the owner of the binary to root and enable SUID: 
-````
+```bash
 mv socker.exe socker
 sudo chown 0:0 socker
 sudo chmod +s socker
 ```
 * Create a list of authorized images as root (you need to fix the path to the images file in socker before compiting):
-```
+```bash
 sudo vim socker-images
 ```
 * Options:
-```
+```bash
 socker --help 
 
 NAME

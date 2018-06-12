@@ -107,7 +107,7 @@ def main(argv):
     #print 'current UID: ',os.getuid(),'\t Current GID: ',os.getgid()
     
     # Checking for docker on the system
-    p = subprocess.Popen('docker --version',shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    p = subprocess.Popen('/usr/bin/docker --version',shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     out,err = p.communicate()
     #print 'return out and err',out,err
     if p.returncode !=0:
@@ -184,7 +184,7 @@ def main(argv):
         sys.exit(2)
     
     # Compose the docker command
-    dockercmd = 'docker run --name='+cid+' -d -u '+str(user)+':'+str(group)
+    dockercmd = '/usr/bin/docker run --name='+cid+' -d -u '+str(user)+':'+str(group)
     if slurm_job_id:
         dockercmd += ' -v $SCRATCH:$SCRATCH -e SCRATCH=$SCRATCH'    
     dockercmd += ' -v /work/:/work/ -v '+PWD+':'+PWD+' -v '+home+':'+home+' -w '+PWD+' -e HOME='+home+' '+img
@@ -211,7 +211,7 @@ def main(argv):
     
     if slurm_job_id:
         # Get the container's PID
-        cpid = int(subprocess.Popen("docker inspect -f '{{ .State.Pid }}' "+cid,\
+        cpid = int(subprocess.Popen("/usr/bin/docker inspect -f '{{ .State.Pid }}' "+cid,\
                                 shell=True, stdout=subprocess.PIPE).stdout.read().strip())
         #print 'container PID: ', cpid
         # Classify the container process (and all of it's children) to the Slurm's cgroups assigned to the job
@@ -223,10 +223,10 @@ def main(argv):
     
     if verbose:
         print 'waiting for the container to exit...\n'
-    subprocess.Popen('docker wait '+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
+    subprocess.Popen('/usr/bin/docker wait '+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
     
     # After the container exit's, capture it's output
-    clog = subprocess.Popen("docker inspect -f '{{.LogPath}}' "+str(cid), shell=True, stdout=subprocess.PIPE).stdout.read().rstrip()
+    clog = subprocess.Popen("/usr/bin/docker inspect -f '{{.LogPath}}' "+str(cid), shell=True, stdout=subprocess.PIPE).stdout.read().rstrip()
     with open(clog,'r') as f:
         if verbose:
             print 'container output:\n'
@@ -238,7 +238,7 @@ def main(argv):
                 sys.stdout.write(d['log'])
     if verbose:        
         print '\nremoving the container...\n'
-    subprocess.Popen('docker rm '+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
+    subprocess.Popen('/usr/bin/docker rm '+cid, shell=True, stdout=subprocess.PIPE).stdout.read()
 
 if __name__ == "__main__":
    main(sys.argv[1:])
